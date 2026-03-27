@@ -3,22 +3,22 @@ import IRepository from "./IRepository.mjs";
 
 
 class SuperHeroRepository extends IRepository {
-    async obtenerPorID(id) {
+    static async obtenerPorID(id) {
         return await superHero.findById(id);
     }
 
-    async obtenerTodos() {
-        return await superHero.find();
+    static async obtenerTodos() {
+        return await superHero.find({});
     }
 
-    async buscarPorAtributo(atributo, valor) {
+    static async buscarPorAtributo(atributo, valor) {
         return await superHero.find({ [atributo]: valor });
     }
 
-    async obtenerMayoresDe30() {
+    static async obtenerMayoresDe30() {
         return await superHero.find({ edad: {$gt: 30} });
     }
 }
 
 
-export default SuperHeroRepository
+export default SuperHeroRepository;

@@ -13,17 +13,29 @@ export async function buscarSuperheroesPorIDController(req, res) {
         const superheroeFormateado = renderizarSuperheroe(superheroe);
         res.status(200).json(superheroeFormateado);
     }   catch (error) {
-        res.status(500).send({mensaje: 'Error al obtener el superheroe', error})
+        res.status(500).send({mensaje: 'Error al obtener el superheroe', error: error.message});
     }
 }
 
 
 export async function obtenerTodosLosSuperheroesController(req, res) {
     try {
+        const superheroes = await obtenerTodosLosSuperheroes();
+
+        const superheroesFormateados = renderizarListaSuperheroes(superheroes);
+        res.status(200).json(superheroesFormateados);
+    }   catch(error) {
+        res.status(500).send({mensaje: 'Superheroes no encontrados', error: error.message});
+    }
+}
+
+
+export async function buscarSuperheroesPorAtributoController(req, res) {
+    try {
         const { atributo, valor } = req.params;
         const superheroes = await buscarSuperheroesPorAtributo(atributo, valor);
         if (superheroes.length === 0) {
-            return send.status(404).send( {mensaje: 'no se encontraron superheroes con ese atributo'} )
+            return res.status(404).send( {mensaje: 'no se encontraron superheroes con ese atributo'} );
         }
 
 
@@ -35,6 +47,16 @@ export async function obtenerTodosLosSuperheroesController(req, res) {
 }
 
 
-export async function name(params) {
-    
+export async function obtenerSuperheroesMayoresA30Controller(req, res) {
+    try {
+        const superheroes = await buscarSuperheroesMayoresA30();
+        if(superheroes.length === 0) {
+            return res.status(404).send({mensaje: 'No se encontraron superheroes mayores a 30'});
+        }
+
+        const superheroesFormateados = renderizarListaSuperheroes(superheroes);
+        res.status(200).json(superheroesFormateados);
+    }   catch (error) {
+        res.status(500).send({mensaje: 'Error al obtener superheroes mayores a 30', error});
+    }
 }
